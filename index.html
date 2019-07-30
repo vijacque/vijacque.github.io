@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html >
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>lazy dawn</title>
+        <style type="text/css">
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+.ingredients {
+    width: 100%;
+    margin: auto;
+}
+.ingredients tr {
+    height: 4em;
+}
+.ingredients tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.ingredients td {
+    text-align: center;
+}
+
+    </style>
+    </head>
+    <body>
+        <table class="ingredients">
+            <tbody id="content" />
+        </table>
+        <script>
+            var data = [
+                { name: "marznoob", realm: "suramar"},
+                { name: "bixrow", realm: "suramar"},
+                { name: "luxii", realm: "medivh"},
+                { name: "Exurïelle", realm: "medivh"},
+                { name: "Elyrhia", realm: "suramar"},
+                { name: "Sök", realm: "suramar"},
+                { name: "Atasan", realm: "medivh"},
+                { name: "Moonbélix", realm: "medivh"},
+                { name: "Lÿlithe", realm: "suramar"},
+                { name: "Daliéna", realm: "medivh"},
+                { name: "Folkeynn", realm: "medivh"},
+                { name: "Tehenhauin	", realm: "suramar"},
+                { name: "Bâlder", realm: "medivh"},
+                { name: "Zimatia", realm: "medivh"},
+                { name: "Ellemayne", realm: "medivh"},
+                { name: "Teischa", realm: "medivh"},
+                { name: "Halvi", realm: "suramar"},
+                { name: "Snøwi", realm: "medivh"},
+                { name: "Líly", realm: "medivh"},
+                { name: "Stormraiden", realm: "medivh"},
+                { name: "Mîlézie", realm: "medivh"},
+                { name: "Galtor", realm: "medivh"},
+                { name: "Gamover", realm: "medivh"},
+                { name: "Gimlli", realm: "medivh"},
+
+            ];
+            let playerDatas = [];
+            dataLength = data.length;
+            let count = 0;
+            data.forEach(function(character) {
+
+                var request = new XMLHttpRequest();
+                request.open('GET', 'https://raider.io/api/v1/characters/profile?region=eu&realm=' + character.realm + '&name=' + character.name + '&fields=mythic_plus_weekly_highest_level_runs', true);
+                request.onload = function() {
+                    var data = JSON.parse(this.response)
+                    runs = data.mythic_plus_weekly_highest_level_runs;
+                    var highestKey = 0;
+                    runs.forEach(function(run) {
+                        if (run.mythic_level > highestKey) {
+                            highestKey = run.mythic_level;
+                        }
+                    });
+                    achieved = highestKey >= 10 ? '✅' : '❌';
+                    playerDatas.push({
+                        name: character.name,
+                        achieved: achieved,
+                        highestKey: highestKey,
+                        thumbnailUrl: data.thumbnail_url,
+                    });
+                    count++;
+                    if (count = dataLength) {
+                        modifyHtml(playerDatas);
+                    }
+                }   
+                request.send();
+            })
+    
+            function modifyHtml(playerDatas) {
+                document.getElementById('content').innerHTML =
+                playerDatas.map(({name, achieved, highestKey, thumbnailUrl}) => `
+                    <tr>
+                        <td>
+                            <img src="${thumbnailUrl}">
+                        </td>
+                        <td class="td">
+                                ${achieved}: ${name}, best key: ${highestKey}
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            
+
+
+        </script>
+    </body>
+</html>
