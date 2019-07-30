@@ -5,32 +5,37 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>lazy dawn</title>
         <style type="text/css">
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
-}
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: sans-serif;
+            }
 
-.ingredients {
-    width: 100%;
-    margin: auto;
-}
-.ingredients tr {
-    height: 4em;
-}
-.ingredients tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-.ingredients td {
-    text-align: center;
-}
-
-    </style>
+            .ingredients {
+                width: 100%;
+                margin: auto;
+            }
+            .ingredients tr {
+                height: 4em;
+            }
+            .ingredients tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            .ingredients td {
+                text-align: center;
+            }
+            .contribute {
+                background-color: #faeaaa;
+                font-size: 0.8em;
+            }
+        </style>
     </head>
     <body>
         <table class="ingredients">
             <tbody id="content" />
         </table>
+
+        <p class="contribute">Contribute or add characters on <a href="https://github.com/vijacque/vijacque.github.io">Github</a></p>
         <script>
             var data = [
                 { name: "marznoob", realm: "suramar"},
@@ -57,13 +62,11 @@ body {
                 { name: "Galtor", realm: "medivh"},
                 { name: "Gamover", realm: "medivh"},
                 { name: "Gimlli", realm: "medivh"},
-
             ];
             let playerDatas = [];
             dataLength = data.length;
             let count = 0;
             data.forEach(function(character) {
-
                 var request = new XMLHttpRequest();
                 request.open('GET', 'https://raider.io/api/v1/characters/profile?region=eu&realm=' + character.realm + '&name=' + character.name + '&fields=mythic_plus_weekly_highest_level_runs', true);
                 request.onload = function() {
@@ -89,7 +92,6 @@ body {
                 }   
                 request.send();
             })
-    
             function modifyHtml(playerDatas) {
                 document.getElementById('content').innerHTML =
                 playerDatas.map(({name, achieved, highestKey, thumbnailUrl}) => `
@@ -103,10 +105,6 @@ body {
                     </tr>
                 `).join('');
             }
-
-            
-
-
         </script>
     </body>
 </html>
